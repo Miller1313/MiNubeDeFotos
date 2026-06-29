@@ -1,0 +1,27 @@
+# Usamos una imagen que ya tiene Python y dlib precompilados para ahorrar memoria
+FROM python:3.10-slim
+
+# Instalar dependencias del sistema necesarias para OpenCV y PostgreSQL
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    cmake \
+    libopenblas-dev \
+    liblapack-dev \
+    libx11-dev \
+    libgtk-3-dev \
+    libgl1-mesa-glx \
+    libglib2.0-0 \
+    libpq-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+# Instalar los paquetes pesados directamente con binarios precompilados
+RUN pip install --no-cache-dir dlib face-recognition fastapi uvicorn python-telegram-bot opencv-python-headless pillow psycopg2-binary
+
+# Copiar el código del servidor al contenedor
+COPY server.py /app/server.py
+
+EXPOSE 8000
+
+CMD ["python", "server.py"]
