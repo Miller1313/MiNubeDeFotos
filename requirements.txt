@@ -1,0 +1,7 @@
+fastapi
+uvicorn
+python-telegram-bot
+face-recognition
+opencv-python-headless
+pillow
+psycopg2-binary
